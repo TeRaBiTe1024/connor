@@ -60,6 +60,17 @@ class SimpleSwitch13(app_manager.RyuApp):
 
         # Match vazio = qualquer pacote
         match = parser.OFPMatch()
+        match_quic = parser.OFPMatch(
+            eth_type = 0x0800,
+            ip_proto = 17,
+            udp_dst = 4433,        
+
+
+        )
+        
+        action_quic = [parser.OFPActionOutput(2)]
+        self.add_flow(datapath, 100, match_quic, action_quic)
+        self.logger.info("Regra QUIC-sim instalada: udp_dst=4433 > porta 2")
         # Ação: mandar para o controlador
         actions = [parser.OFPActionOutput(ofproto.OFPP_CONTROLLER,
                                           ofproto.OFPCML_NO_BUFFER)]
